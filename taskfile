@@ -27,7 +27,9 @@ function customize {
       echo "A domain is required"
       exit 1
     fi
-    grep -R example.com . | cut -d':' -f1 | uniq | while read f ; do sed -i s/example.com/$2/g $f ; done
+    grep -R example.com . | cut -d':' -f1 | grep -v taskfile | uniq | while read f
+      do sed -i s/example.com/$2/g $f
+      done
   else
     echo "Invalid command"
     exit 1
