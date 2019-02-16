@@ -1,0 +1,70 @@
+# https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+
+version: '3'
+services:
+
+  # REVERSE PROXY
+  nginx:
+    image: nginx:1.15-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - wikijs
+      - certbot
+    volumes:
+      - ./services/nginx:/etc/nginx/conf.d
+      - ./services/certbot/conf:/etc/letsencrypt
+      - ./services/certbot/www:/var/www/certbot
+      - ./services/www:/var/www/html # placeholder HTML web site
+    networks:
+      - proxy-network
+
+  # LETSENCRYPT MANAGER
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./services/certbot/conf:/etc/letsencrypt
+      - ./services/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  # WIKI DB
+  wikidb:
+    image: mongo:3
+    container_name: wikidb
+    expose:
+      - '27017'
+    command: '--smallfiles --bind_ip ::,0.0.0.0'
+    restart: always
+    networks:
+      - databases-network
+    environment:
+      - 'MONGO_LOG_DIR=/dev/null'
+    volumes:
+      - ./services/wikijs/mongo:/services/db
+      
+  # WIKI ENGINE
+  wikijs:
+    image: 'requarks/wiki:latest'
+    container_name: wikijs
+    restart: always
+    depends_on:
+      - wikidb
+    networks:
+      - proxy-network
+      - databases-network
+    expose:
+      - '3000'
+    environment:
+      WIKI_ADMIN_EMAIL: user@example.com
+    volumes:
+      - ./services/wikijs/config.yml:/var/wiki/config.yml
+
+networks:
+  proxy-network:
+  databases-network:
