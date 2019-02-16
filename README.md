@@ -9,16 +9,13 @@ git clone https://github.com/ledfusion/self-service.git
 cd self-service
 
 # DEFINE YOUR CONTACT EMAIL
-CONTACT_EMAIL="my-user@my-email.com"
-sed -i s/user@email.com/${CONTACT_EMAIL}/g ./init-letsencrypt.sh
+./taskfile customize contact "john@smith.com"
 
 # DEFINE YOUR WIKI USER EMAIL
-WIKI_USER_EMAIL="my-wiki-user@email.com"
-sed -i s/wiki-admin@domain.com/${WIKI_USER_EMAIL}/g ./services/wikijs/config.yml
+./taskfile customize wiki-email "john@smith.com"
 
 # DEFINE YOUR DOMAIN
-MY_DOMAIN="my-top-level-domain.com"
-grep -R example.com . | cut -d':' -f1 | uniq | while read f ; do sed -i s/example.com/${MY_DOMAIN}/g $f ; done
+./taskfile customize domain "my-top-level-domain.com"
 
 # SET UP DUMMY CERTIFICATES, START AND GENERATE VALID CERTIFICATES
 ./init-letsencrypt.sh
