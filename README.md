@@ -12,6 +12,10 @@ cd self-service
 CONTACT_EMAIL="my-user@my-email.com"
 sed -i s/user@email.com/${CONTACT_EMAIL}/g ./init-letsencrypt.sh
 
+# DEFINE YOUR WIKI USER EMAIL
+WIKI_USER_EMAIL="my-wiki-user@email.com"
+sed -i s/wiki-admin@domain.com/${WIKI_USER_EMAIL}/g ./services/wikijs/config.yml
+
 # DEFINE YOUR DOMAIN
 MY_DOMAIN="my-top-level-domain.com"
 grep -R example.com . | cut -d':' -f1 | uniq | while read f ; do sed -i s/example.com/${MY_DOMAIN}/g $f ; done
@@ -31,3 +35,7 @@ Now you have:
 * https://www.my-top-level-domain.com/
 * http://wiki.my-top-level-domain.com/
 * https://wiki.my-top-level-domain.com/
+
+## Wiki.js
+
+Login with $WIKI_USER_EMAIL and password `admin123`. Change it when done.

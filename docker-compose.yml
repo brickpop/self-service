@@ -61,7 +61,7 @@ services:
     expose:
       - '3000'
     environment:
-      WIKI_ADMIN_EMAIL: user@example.com
+      WIKI_ADMIN_EMAIL: wiki-admin@domain.com
     volumes:
       - ./services/wikijs/config.yml:/var/wiki/config.yml
 
