@@ -7,7 +7,7 @@ ROOT_DOMAIN=example.com
 DOMAINS=($ROOT_DOMAIN www.$ROOT_DOMAIN wiki.$ROOT_DOMAIN pad.$ROOT_DOMAIN)
 RSA_KEY_SIZE=4096
 DATA_PATH="./services/certbot"
-EMAIL="user@example.com" # Adding a valid address is strongly recommended
+EMAIL="user@email.com" # Adding a valid address is strongly recommended
 USE_STAGING=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$DATA_PATH" ]; then
@@ -27,12 +27,12 @@ if [ ! -e "$DATA_PATH/conf/options-ssl-nginx.conf" ] || [ ! -e "$DATA_PATH/conf/
 fi
 
 echo "### Creating dummy certificate for $DOMAINS ..."
-PATH="/etc/letsencrypt/live/$DOMAINS"
+LETSENCRYPT_PATH="/etc/letsencrypt/live/$DOMAINS"
 mkdir -p "$DATA_PATH/conf/live/$DOMAINS"
 docker-compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:1024 -days 1\
-    -keyout '$PATH/privkey.pem' \
-    -out '$PATH/fullchain.pem' \
+    -keyout '$LETSENCRYPT_PATH/privkey.pem' \
+    -out '$LETSENCRYPT_PATH/fullchain.pem' \
     -subj '/CN=localhost'" certbot
 echo
 
