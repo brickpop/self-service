@@ -9,6 +9,28 @@ function init {
   ./init-letsencrypt.sh
 }
 
+function customize {
+  if [ "$1" == "contact" ] ; then
+    if [ "$2" == "" ] ; then
+      echo "An email is required"
+      exit 1
+    fi
+    sed -i s/user@email.com/$2/g ./init-letsencrypt.sh
+  elif [ "$1" == "wiki-email" ] ; then
+    if [ "$2" == "" ] ; then
+      echo "An email is required"
+      exit 1
+    fi
+    sed -i s/wiki-admin@domain.com/$2/g ./services/wikijs/config.yml
+  elif [ "$1" == "domain" ] ; then
+    if [ "$2" == "" ] ; then
+      echo "A domain is required"
+      exit 1
+    fi
+    grep -R example.com . | cut -d':' -f1 | uniq | while read f ; do sed -i s/example.com/$2/g $f ; done
+  fi
+}
+
 function logs {
   docker-compose -f $DOCKERFILE logs -f $1
 }
