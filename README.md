@@ -44,6 +44,7 @@ Choose a username and a password and start creating your content types.
 ## TODO
 
 - [ ] Make `taskfile` resilient to changes to its own search/replace tokens
+- [ ] Docker registry
 - [ ] Cryptpad
 - [ ] Strapi project based on an external repo
 - [ ] Backup system
