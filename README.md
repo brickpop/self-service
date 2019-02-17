@@ -35,7 +35,7 @@ Now you have:
 
 ## Wiki.js
 
-Login with $WIKI_USER_EMAIL and password `admin123`. Change it when done.
+Login with your wiki user email and password `admin123`. Change it when done.
 
 ## Strapi
 
