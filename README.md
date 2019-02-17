@@ -36,3 +36,14 @@ Now you have:
 ## Wiki.js
 
 Login with $WIKI_USER_EMAIL and password `admin123`. Change it when done.
+
+## Strapi
+
+Choose a username and a password and start creating your content types.
+
+## TODO
+
+- [ ] Make `taskfile` resilient to changes to its own search/replace tokens
+- [ ] Cryptpad
+- [ ] Strapi project based on an external repo
+- [ ] Backup system

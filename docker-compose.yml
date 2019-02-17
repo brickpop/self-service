@@ -65,6 +65,62 @@ services:
     volumes:
       - ./services/wikijs/config.yml:/var/wiki/config.yml
 
+  # cryptpad:
+  #   build:
+  #     context: .
+  #     args:
+  #       - VERSION=${VERSION}
+  #   image: "xwiki/cryptpad:${VERSION}"
+  #   hostname: cryptpad
+  #   environment:
+  #     - USE_SSL=false
+  #     - STORAGE='./storage/file'
+  #     - LOG_TO_STDOUT=true
+
+  #   restart: always
+  #   volumes:
+  #     - ./services/cryptpad/files:/cryptpad/datastore:rw
+  #     - ./services/cryptpad/customize:/cryptpad/customize:rw
+  #     - ./services/cryptpad/pins:/cryptpad/pins:rw
+  #     - ./services/cryptpad/blob:/cryptpad/blob:rw
+  #     - ./services/cryptpad/blobstage:/cryptpad/blobstage:rw
+  #     - ./services/cryptpad/tasks:/cryptpad/tasks:rw
+  #     - ./services/cryptpad/block:/cryptpad/block:rw
+
+  strapi:
+    # build: .
+    image: strapi/strapi
+    environment:
+      - APP_NAME=strapi-app
+      - DATABASE_CLIENT=mongo
+      - DATABASE_HOST=strapidb
+      - DATABASE_PORT=27017
+      - DATABASE_NAME=strapi
+      - DATABASE_USERNAME=
+      - DATABASE_PASSWORD=
+      - DATABASE_SSL=false
+      - DATABASE_AUTHENTICATION_DATABASE=strapi
+      - HOST=localhost
+      - NODE_ENV=production
+    ports:
+      - 1337:1337
+    volumes:
+      - ./services/strapi/app:/usr/src/api/strapi-app
+      #- /usr/src/api/strapi-app/node_modules
+    depends_on:
+      - strapidb
+    restart: always
+
+  strapidb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=strapi
+    expose:
+      - '27017'
+    volumes:
+      - ./services/strapi/db:/data/db
+    restart: always
+  
 networks:
   proxy-network:
   databases-network:
