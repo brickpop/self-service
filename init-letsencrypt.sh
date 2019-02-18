@@ -6,7 +6,7 @@
 MAIN_DOMAIN=example.com
 DOMAINS=($MAIN_DOMAIN www.$MAIN_DOMAIN wiki.$MAIN_DOMAIN pad.$MAIN_DOMAIN)
 RSA_KEY_SIZE=4096
-DATA_PATH="./services/certbot"
+DATA_PATH="~/storage/certbot"
 EMAIL="user@email.com" # Adding a valid address is strongly recommended
 USE_STAGING=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
