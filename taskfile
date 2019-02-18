@@ -79,9 +79,10 @@ function clean {
       --delete-untagged=true
 
   else
+    echo "WARNING:"
     echo "Make sure that you run this command while the containers you care are running"
     read -p "Tap enter to continue or exit with Ctrl+C" a
-    
+
     docker network prune
     docker container prune --filter "until=24h"
     docker image prune -a --filter "until=168h"
