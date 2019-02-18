@@ -61,6 +61,11 @@ docker pull localhost:5000/test
 
 Login with your wiki user email and password `admin123`. Change it right after.
 
+## Cleanup
+
+- You can clean unused volumes, containers, images and networks with `./taskfile clean`
+- You can get some space back from the Docker Registry by running `./taskfile clean registry`
+
 ## TODO
 
 - [ ] Make `taskfile` resilient to changes to its own search/replace tokens

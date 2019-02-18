@@ -67,18 +67,23 @@ function htpasswd {
   docker run --rm --entrypoint htpasswd registry:2 -Bbn docker $password > services/nginx/docker-registry.htpasswd
 }
 
-function tidy_up {
-  docker image prune
-}
+function clean {
+  if [ "$1" == "registry" ] ; then
 
-function clean_registry {
-  docker run --rm --link docker-registry \
-    --network docker_proxy-network  anoxis/registry-cli \
-    -r http://docker-registry:5000 --delete --num 2
+    docker run --rm --link docker-registry \
+      --network docker_proxy-network  anoxis/registry-cli \
+      -r http://docker-registry:5000 --delete --num 2
 
-  docker exec docker-registry \
-    registry garbage-collect /etc/docker/registry/config.yml \
-    --delete-untagged=true
+    docker exec docker-registry \
+      registry garbage-collect /etc/docker/registry/config.yml \
+      --delete-untagged=true
+
+  else
+    docker network prune
+    docker container prune --filter "until=24h"
+    docker image prune -a --filter "until=24h"
+    docker volume prune
+  fi
 }
 
 ###############################################################################
