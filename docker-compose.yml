@@ -19,7 +19,7 @@ services:
       # - cryptpad
     volumes:
       - ./services/nginx:/etc/nginx/conf.d
-      - ~/storage/certbot/conf:/etc/letsencrypt:ro
+      - ~/storage/certbot/conf:/etc/letsencrypt # we need rw to run openssl
       - ~/storage/certbot/www:/var/www/certbot:ro
       - ./services/www:/var/www/html # placeholder HTML web site
     networks:
