@@ -33,18 +33,37 @@ Now you have:
 * http://wiki.my-top-level-domain.com/
 * https://wiki.my-top-level-domain.com/
 
+## Docker registry
+
+Run `./taskfile htpasswd` to generate a password for the Docker Registry.
+
+Log in to your registry from your local computer:
+
+```
+docker login -u=docker -p=<PASSWORD> registry.example.com
+```
+
+Tag and push an image:
+
+```
+docker tag ubuntu registry.example.com/test
+docker push registry.example.com/test
+docker pull registry.example.com/test
+```
+
+From within the server
+```
+docker login -u=docker -p=<PASSWORD> localhost:5000
+docker pull localhost:5000/test
+```
+
 ## Wiki.js
 
 Login with your wiki user email and password `admin123`. Change it right after.
 
-## Strapi
-
-Choose a username and a password and start creating your content types.
-
 ## TODO
 
 - [ ] Make `taskfile` resilient to changes to its own search/replace tokens
-- [ ] Docker registry
+- [x] Docker registry
 - [ ] Cryptpad
-- [ ] Strapi project based on an external repo
 - [ ] Backup system

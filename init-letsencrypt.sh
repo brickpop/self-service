@@ -3,8 +3,8 @@
 # Original article
 # https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 
-ROOT_DOMAIN=example.com
-DOMAINS=($ROOT_DOMAIN www.$ROOT_DOMAIN wiki.$ROOT_DOMAIN pad.$ROOT_DOMAIN)
+MAIN_DOMAIN=example.com
+DOMAINS=($MAIN_DOMAIN www.$MAIN_DOMAIN wiki.$MAIN_DOMAIN pad.$MAIN_DOMAIN)
 RSA_KEY_SIZE=4096
 DATA_PATH="./services/certbot"
 EMAIL="user@email.com" # Adding a valid address is strongly recommended

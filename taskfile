@@ -6,6 +6,9 @@ DOCKERFILE=docker-compose.yml
 # SERVER ACTIONS
 
 function init {
+  mkdir -p ~/storage/cetbot
+  mkdir -p ~/storage/docker-registry
+  mkdir -p ~/storage/wikidb
   ./init-letsencrypt.sh
 }
 
@@ -41,7 +44,7 @@ function logs {
 }
 
 function ps {
-  docker ps | grep dockersuit
+  docker-compose ps
 }
 
 function build {
@@ -52,15 +55,30 @@ function upgrade {
   build $1
 
   # will recreate newer container for updated images
-  docker-compose -f $DOCKERFILE up -d
+  docker-compose -f $DOCKERFILE up -d --force-recreate $1
 }
 
 function restart {
   docker-compose -f $DOCKERFILE restart $1
 }
 
+function htpasswd {
+  read -p "Password: " -s password
+  docker run --rm --entrypoint htpasswd registry:2 -Bbn docker $password > services/nginx/docker-registry.htpasswd
+}
+
 function tidy_up {
   docker image prune
+}
+
+function clean_registry {
+  docker run --rm --link docker-registry \
+    --network docker_proxy-network  anoxis/registry-cli \
+    -r http://docker-registry:5000 --delete --num 2
+
+  docker exec docker-registry \
+    registry garbage-collect /etc/docker/registry/config.yml \
+    --delete-untagged=true
 }
 
 ###############################################################################

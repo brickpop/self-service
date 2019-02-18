@@ -17,8 +17,8 @@ services:
       - certbot
     volumes:
       - ./services/nginx:/etc/nginx/conf.d
-      - ./services/certbot/conf:/etc/letsencrypt
-      - ./services/certbot/www:/var/www/certbot
+      - ~/storage/certbot/conf:/etc/letsencrypt
+      - ~/storage/certbot/www:/var/www/certbot
       - ./services/www:/var/www/html # placeholder HTML web site
     networks:
       - proxy-network
@@ -29,10 +29,25 @@ services:
     container_name: certbot
     restart: always
     volumes:
-      - ./services/certbot/conf:/etc/letsencrypt
-      - ./services/certbot/www:/var/www/certbot
+      - ~/storage/certbot/conf:/etc/letsencrypt
+      - ~/storage/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
+  # DOCKER REGISTRY
+  docker-registry:
+    image: registry:2
+    container_name: docker-registry
+    expose:
+      - "5000" # allow the host to pull from localhost:5000
+    ports:
+      - "5000:5000"
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+    volumes:
+      - ~/storage/docker-registry:/var/lib/registry
+    networks:
+      - proxy-network
+      
   # WIKI DB
   wikidb:
     image: mongo:3
@@ -41,12 +56,12 @@ services:
       - '27017'
     command: '--smallfiles --bind_ip ::,0.0.0.0'
     restart: always
-    networks:
-      - databases-network
     environment:
       - 'MONGO_LOG_DIR=/dev/null'
     volumes:
-      - ./services/wikijs/mongo:/services/db
+      - ~/storage/wikidb:/services/db
+    networks:
+      - databases-network
       
   # WIKI ENGINE
   wikijs:
@@ -55,15 +70,15 @@ services:
     restart: always
     depends_on:
       - wikidb
-    networks:
-      - proxy-network
-      - databases-network
     expose:
       - '3000'
     environment:
       WIKI_ADMIN_EMAIL: wiki-admin@domain.com
     volumes:
       - ./services/wikijs/config.yml:/var/wiki/config.yml
+    networks:
+      - proxy-network
+      - databases-network
 
   # cryptpad:
   #   build:
@@ -76,51 +91,19 @@ services:
   #     - USE_SSL=false
   #     - STORAGE='./storage/file'
   #     - LOG_TO_STDOUT=true
-
+  #   networks:
+  #     - proxy-network
   #   restart: always
   #   volumes:
-  #     - ./services/cryptpad/files:/cryptpad/datastore:rw
-  #     - ./services/cryptpad/customize:/cryptpad/customize:rw
-  #     - ./services/cryptpad/pins:/cryptpad/pins:rw
-  #     - ./services/cryptpad/blob:/cryptpad/blob:rw
-  #     - ./services/cryptpad/blobstage:/cryptpad/blobstage:rw
-  #     - ./services/cryptpad/tasks:/cryptpad/tasks:rw
-  #     - ./services/cryptpad/block:/cryptpad/block:rw
+  #     - ~/storage/cryptpad/files:/cryptpad/datastore:rw
+  #     - ~/storage/cryptpad/customize:/cryptpad/customize:rw
+  #     - ~/storage/cryptpad/pins:/cryptpad/pins:rw
+  #     - ~/storage/cryptpad/blob:/cryptpad/blob:rw
+  #     - ~/storage/cryptpad/blobstage:/cryptpad/blobstage:rw
+  #     - ~/storage/cryptpad/tasks:/cryptpad/tasks:rw
+  #     - ~/storage/cryptpad/block:/cryptpad/block:rw
 
-  strapi:
-    # build: .
-    image: strapi/strapi
-    environment:
-      - APP_NAME=strapi-app
-      - DATABASE_CLIENT=mongo
-      - DATABASE_HOST=strapidb
-      - DATABASE_PORT=27017
-      - DATABASE_NAME=strapi
-      - DATABASE_USERNAME=
-      - DATABASE_PASSWORD=
-      - DATABASE_SSL=false
-      - DATABASE_AUTHENTICATION_DATABASE=strapi
-      - HOST=localhost
-      - NODE_ENV=production
-    ports:
-      - 1337:1337
-    volumes:
-      - ./services/strapi/app:/usr/src/api/strapi-app
-      #- /usr/src/api/strapi-app/node_modules
-    depends_on:
-      - strapidb
-    restart: always
 
-  strapidb:
-    image: mongo
-    environment:
-      - MONGO_INITDB_DATABASE=strapi
-    expose:
-      - '27017'
-    volumes:
-      - ./services/strapi/db:/data/db
-    restart: always
-  
 networks:
   proxy-network:
   databases-network:
