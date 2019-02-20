@@ -84,10 +84,7 @@ services:
 
   # ZK DRIVE
   cryptpad:
-    build:
-      context: .
-      args:
-        - VERSION=latest
+    container_name: wikijs
     image: "xwiki/cryptpad"
     hostname: cryptpad
     environment:
