@@ -2,7 +2,8 @@ FROM node:8-alpine
 
 WORKDIR /cryptpad
 
-RUN apk --no-cache add --virtual ephemeral-deps git tini \
+RUN apk --no-cache add --virtual ephemeral-deps git \
+    && apk add tini \
     && git clone https://github.com/xwiki-labs/cryptpad.git --branch 2.17.0 . \
     && npm install --production \
     && npm install -g bower \
