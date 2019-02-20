@@ -9,6 +9,7 @@ function init {
   mkdir -p ~/storage/cetbot
   mkdir -p ~/storage/docker-registry
   mkdir -p ~/storage/wikidb
+  mkdir -p ~/storage/cryptpad
   ./init-letsencrypt.sh
 }
 
