@@ -16,7 +16,7 @@ services:
       - certbot
       - docker-registry
       - wikijs
-      - cryptpad
+      # - cryptpad
     volumes:
       - ./services/nginx:/etc/nginx/conf.d
       - ~/storage/certbot/conf:/etc/letsencrypt # we need rw to run openssl
