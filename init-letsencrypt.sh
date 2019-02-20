@@ -11,9 +11,14 @@ EMAIL="user@email.com" # Adding a valid address is strongly recommended
 USE_STAGING=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$DATA_PATH" ]; then
-  read -p "Existing data found for $DOMAINS. Continue and replace existing certificate? (y/N) " DECISION
+  echo "Existing data found for $DOMAINS"
+  read -p "Do you want to make a back up before replacing the existing certificates? (y/N) " DECISION
   if [ "$DECISION" != "Y" ] && [ "$DECISION" != "y" ]; then
+    echo "Aborting"
     exit
+  else
+    sudo rm -Rf $DATA_PATH.bak
+    sudo cp -a $DATA_PATH $DATA_PATH.bak
   fi
 fi
 
