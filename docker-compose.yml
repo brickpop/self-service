@@ -82,30 +82,30 @@ services:
       - proxy-network
       - databases-network
 
-  # ZK DRIVE
-  cryptpad:
-    build:
-      context: ./services/cryptpad
-      args:
-        - VERSION=2.17.0
-    image: "cryptpad:2.17.0"
-    container_name: cryptpad
-    hostname: cryptpad
-    environment:
-      - USE_SSL=false
-      - STORAGE='./storage/file'
-      - LOG_TO_STDOUT=true
-    networks:
-      - proxy-network
-    restart: always
-    volumes:
-      - ~/storage/cryptpad/files:/cryptpad/datastore:rw
-      - ~/storage/cryptpad/customize:/cryptpad/customize:rw
-      - ~/storage/cryptpad/pins:/cryptpad/pins:rw
-      - ~/storage/cryptpad/blob:/cryptpad/blob:rw
-      - ~/storage/cryptpad/blobstage:/cryptpad/blobstage:rw
-      - ~/storage/cryptpad/tasks:/cryptpad/tasks:rw
-      - ~/storage/cryptpad/block:/cryptpad/block:rw
+  # # ZK DRIVE
+  # cryptpad:
+  #   build:
+  #     context: ./services/cryptpad
+  #     args:
+  #       - VERSION=2.17.0
+  #   image: "cryptpad:2.17.0"
+  #   container_name: cryptpad
+  #   hostname: cryptpad
+  #   environment:
+  #     - USE_SSL=false
+  #     - STORAGE='./storage/file'
+  #     - LOG_TO_STDOUT=true
+  #   networks:
+  #     - proxy-network
+  #   restart: always
+  #   volumes:
+  #     - ~/storage/cryptpad/files:/cryptpad/datastore:rw
+  #     - ~/storage/cryptpad/customize:/cryptpad/customize:rw
+  #     - ~/storage/cryptpad/pins:/cryptpad/pins:rw
+  #     - ~/storage/cryptpad/blob:/cryptpad/blob:rw
+  #     - ~/storage/cryptpad/blobstage:/cryptpad/blobstage:rw
+  #     - ~/storage/cryptpad/tasks:/cryptpad/tasks:rw
+  #     - ~/storage/cryptpad/block:/cryptpad/block:rw
 
 networks:
   proxy-network:
