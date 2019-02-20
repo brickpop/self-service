@@ -87,8 +87,8 @@ services:
     build:
       context: ./services/cryptpad
       args:
-        - VERSION=${VERSION}
-    image: "xwiki/cryptpad:${VERSION}"
+        - VERSION=2.17.0
+    image: "cryptpad:2.17.0"
     container_name: cryptpad
     hostname: cryptpad
     environment:
