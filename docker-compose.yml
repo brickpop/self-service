@@ -84,8 +84,12 @@ services:
 
   # ZK DRIVE
   cryptpad:
-    container_name: wikijs
-    image: "xwiki/cryptpad"
+    build:
+      context: ./services/cryptpad
+      args:
+        - VERSION=${VERSION}
+    image: "xwiki/cryptpad:${VERSION}"
+    container_name: cryptpad
     hostname: cryptpad
     environment:
       - USE_SSL=false
